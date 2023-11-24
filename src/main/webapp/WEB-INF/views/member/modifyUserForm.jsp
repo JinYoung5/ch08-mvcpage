@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원가입</title>
+<title>회원정보 수정</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
@@ -89,47 +89,36 @@ $(function(){
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	<div class="content-main">
 		<h2>회원가입</h2>
-		<form id="register_form" action="registerUser.do" method="post">
+		<form id="modify_form" action="modifyUser.do" method="post">
 			<ul>
 				<li>
-					<label for="id">id</label>
-					<input type="text" name="id" id="id" maxlength="12" autocomplete="off" class="input-check">
-					<input type="button" value="ID중복체크" id="id_check">
-					<span id="message_id"></span>
-					<div class="form-notice">*영문 또는 숫자(4자~12자)</div>
-				</li>
-				<li>
 					<label for="name">이름</label>
-					<input type="text" name="name" id="name" maxlength="10" class="input-check">
-				</li>
-				<li>
-					<label for="passwd">비밀번호</label>
-					<input type="password" name="passwd" id="passwd" maxlength="12" class="input-check">
+					<input type="text" name="name" id="name" maxlength="10" value="${member.name}" class="input-check">
 				</li>
 				<li>
 					<label for="phone">전화번호</label>
-					<input type="text" name="phone" id="phone" maxlength="15" class="input-check">
+					<input type="text" name="phone" id="phone" value="${member.phone}" maxlength="15"  class="input-check">
 				</li>
 				<li>
 					<label for="email">이메일</label>
-					<input type="email" name="email" id="email" maxlength="50" class="input-check">
+					<input type="email" name="email" id="email" value="${member.email}" maxlength="50" class="input-check">
 				</li>
 				<li>
 					<label for="zipcode">우편번호</label>
-					<input type="text" name="zipcode" id="zipcode" maxlength="5" autocomplete="off" class="input-check">
+					<input type="text" name="zipcode" id="zipcode" value="${member.zipcode}" maxlength="5" autocomplete="off" class="input-check">
 					<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
 				</li>
 				<li>
 					<label for="address1">주소</label>
-					<input type="text" name="address1" id="address1" maxlength="30" class="input-check">
+					<input type="text" name="address1" id="address1" value="${member.address1}" maxlength="30" class="input-check">
 				</li>
 				<li>
 					<label for="address2">나머지 주소</label>
-					<input type="text" name="address2" id="address2" maxlength="30" class="input-check">
+					<input type="text" name="address2" id="address2" value="${member.address2}" maxlength="30" class="input-check">
 				</li>
 			</ul>
 			<div class="align-center">
-				<input type="submit" value="등록">
+				<input type="submit" value="수정">
 				<input type="button" value="홈으로" onclick="${pageContext.request.contextPath}/main/main.do">
 			</div>
 		</form>

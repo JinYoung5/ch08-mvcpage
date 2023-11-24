@@ -17,6 +17,14 @@ public class MemberVO {
 	private Date reg_date;		//프로필 사진
 	private Date modify_date;	//수정일
 	
+	//비밀번호 일치 여부 체크
+	public boolean isCheckedPassword(String userPasswd) {
+		//회원 등급(auth) : 0->탈퇴회원, 1->정지회원, 2->일반회원, 9->관리자
+		if(auth > 1 && passwd.equals(userPasswd)) {
+			return true;
+		}
+		return false;
+	}
 	public int getMem_num() {
 		return mem_num;
 	}
