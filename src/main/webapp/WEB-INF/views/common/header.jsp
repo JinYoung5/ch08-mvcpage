@@ -10,8 +10,13 @@
 		<li>
 			<a href="${pageContext.request.contextPath}/board/list.do">게시판</a>
 		</li>
+		<c:if test="${!empty user_num && user_auth == 9}">
+		<li>
+			<a href="${pageContext.request.contextPath}/member/adminList.do">회원관리</a>
+		</li>
+		</c:if>
 		<c:if test="${!empty user_num}">
-		<li><a href="${pageContext.request.contextPath}/member/myPage.do">MyPage</a></li>
+		<li><a href="${pageContext.request.contextPath}/member/myPage.do">마이페이지</a></li>
 		</c:if>
 		
 		<c:if test="${!empty user_num && !empty user_photo}">

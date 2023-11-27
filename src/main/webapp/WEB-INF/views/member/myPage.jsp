@@ -121,8 +121,8 @@ $(function(){
 				</li>
 			</ul>
 			<h3>
-				연락처
-				<input type="button" value="연락처 수정" onclick="location.href='modifyUserForm.do'">
+				상세정보
+				<input type="button" value="상세정보 수정" onclick="location.href='modifyUserForm.do'">
 			</h3>
 			<ul>
 				<li>이름 : ${member.name}</li>
