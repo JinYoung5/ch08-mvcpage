@@ -7,6 +7,21 @@
 <meta charset="UTF-8">
 <title>회원목록</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<script type="text/javascript">
+window.onload = function() {
+	let myForm = document.getElementById('search_form');
+	//이벤트 연결
+	myForm.onsubmit=function(){
+		let keyword = document.getElementById('keyword');
+		if(keyword.value.trim()==''){
+			alert('검색어를 입력하세요');
+			keyword.value = '';
+			keyword.focus();
+			return false;
+		}
+	};
+};
+</script>
 </head>
 <body>
 <div class="page-main">
