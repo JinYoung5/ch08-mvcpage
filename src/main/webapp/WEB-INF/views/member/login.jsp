@@ -18,13 +18,19 @@
 		<div class="result-display">
 			<div class="align-center">
 				정지된 회원 ID입니다.<br>
-				<input type="button" value="홈으로" onclick="${pageContext.request.contextPath}/main/main.do">
+				<input type="button" value="홈으로" onclick="location.href='${pageContext.request.contextPath}/main/main.do'">
 			</div>
 		</div>
 	</div>
 </div>
 </body>
 </html>
+	</c:when>
+	<c:when test="${auth == 0}">
+		<script type="text/javascript">
+			alert('탈퇴한 회원입니다.');
+			history.go(-1);
+		</script>
 	</c:when>
 	<%-- auth가 1이 아닌 경우 --%>
 	<c:otherwise>
