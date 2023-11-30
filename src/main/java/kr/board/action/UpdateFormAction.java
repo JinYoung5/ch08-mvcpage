@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import kr.board.dao.BoardDAO;
 import kr.board.vo.BoardVO;
 import kr.controller.Action;
+import kr.util.StringUtil;
 
 public class UpdateFormAction implements Action{
 
@@ -27,6 +28,13 @@ public class UpdateFormAction implements Action{
 			//로그인한 회원번호와 작성자 회원번호 불일치
 			 return "/WEB-INF/views/common/notice.jsp";
 		}
+		
+		/*
+		 * 큰 따옴표 처리(수정폼의 input 태그에만 명시)
+		 * 게시판에 글 작성시 input태그에서 ""를 넣어서 글쓰기를 하면 정상적으로 글 등록되고 목록 및 상세 페이지에서 잘 표시됨.
+		 * 수정할 때 input 태그에 ㄷ에이터가 표시되지 않은 현상이 발생
+		 */
+		db_board.setTitle(StringUtil.parseQuot(db_board.getTitle()));
 		
 		request.setAttribute("board", db_board);
 		

@@ -231,3 +231,6 @@ ul.detail-sub li:last-child{
 	text-align: right;
 	line-height: 250%;
 }
+#output_fav{
+	cursor: pointer;
+}
