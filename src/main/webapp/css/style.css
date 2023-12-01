@@ -234,3 +234,44 @@ ul.detail-sub li:last-child{
 #output_fav{
 	cursor: pointer;
 }
+div#reply_div{
+	padding: 5px 10px 40px 10px;
+	margin-top: 10px;
+	background-color: #EEEEEE;
+}
+form#re_form{
+	width: 650px;
+	border: none;
+}
+span.re-title{
+	font-size: 10pt;
+	color: #999;
+}
+span.letter-count{
+	font-size: 10pt;
+	color: #999;
+}
+textarea.rep-content{
+	width: 90%;
+	height: 50px;
+	margin: 10ox 10px;
+}
+div#re_first, div#mre_first{
+	float: left;
+	width: 70%;
+	padding-left: 15px;
+	margin-bottom: 10px;
+}
+div#loading{
+	text-align: center;
+}
+div.paging-button{
+	text-align: right;
+}
+div#output{
+	clear: both;
+}
+form#mre_form{
+	border: none;
+	margin: 5px;
+}
