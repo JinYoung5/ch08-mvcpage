@@ -146,6 +146,7 @@ $(function(){
 		modifyUI += ' <input type="submit" value="수정">';
 		modifyUI += ' <input type="button" value="취소" class="re-reset">';
 		modifyUI += '</div>';
+		modifyUI += '<hr size="1" noshade width="96%">';
 		modifyUI += '</form>';
 		
 		//이전에 이미 수정하는 댓글이 있을 경우 수정버튼을 클릭하면 숨겨져 있는 div(class=sub-item)을 환전시키고 수정폼을 초기화(제거)

@@ -10,6 +10,7 @@ import kr.board.vo.BoardFavVO;
 import kr.board.vo.BoardReplyVO;
 import kr.board.vo.BoardVO;
 import kr.util.DBUtil;
+import kr.util.DurationFromNow;
 import kr.util.StringUtil;
 
 public class BoardDAO {
@@ -540,9 +541,10 @@ public class BoardDAO {
 			while(rs.next()) {
 				BoardReplyVO reply = new BoardReplyVO();
 				reply.setRe_num(rs.getInt("re_num"));
-				reply.setRe_date(rs.getString("re_date"));
+				//날짜 -> 1분전, 1시간전, 1일전 형식의 문자열로 변환
+				reply.setRe_date(DurationFromNow.getTimeDiffLabel(rs.getString("re_date")));
 				if(rs.getString("re_modifydate")!=null) {
-					reply.setRe_modifydate(rs.getString("re_modifydate"));
+					reply.setRe_modifydate(DurationFromNow.getTimeDiffLabel(rs.getString("re_modifydate")));
 				}
 				reply.setRe_content(StringUtil.useBrNoHtml(rs.getString("re_content")));
 				reply.setBoard_num(rs.getInt("board_num"));
