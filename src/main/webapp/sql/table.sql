@@ -38,7 +38,7 @@ create table zboard(
 );
 create sequence zboard_seq;
 
---게시판 종아요 기능
+--게시판 좋아요 기능
 create table zboard_fav(
 	board_num number not null,
 	mem_num number not null,
