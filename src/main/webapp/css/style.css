@@ -345,3 +345,9 @@ input[type="number"].quantity-width{
 .sold-out{
 	color: red;
 }
+
+/* 장바구니
+------------------------------*/
+form[id="cart_order"]{
+	border: none;
+}

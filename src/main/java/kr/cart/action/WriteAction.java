@@ -12,6 +12,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import kr.cart.dao.CartDAO;
 import kr.cart.vo.CartVO;
 import kr.controller.Action;
+import kr.item.dao.ItemDAO;
+import kr.item.vo.ItemVO;
 
 public class WriteAction implements Action{
 
@@ -33,13 +35,28 @@ public class WriteAction implements Action{
 			cart.setMem_num(user_num);
 			
 			CartDAO dao = CartDAO.getInstance();
-		//	CartVO db_cart = dao.getCart(cart);
-		//	if(db_cart == null) { //동일 상품이 없을 경우
+			CartVO db_cart = dao.getCart(cart);
+			if(db_cart == null) { //동일 상품이 없을 경우
 				dao.insertCart(cart);
 				mapAjax.put("result", "success");
-		//	}else { //동일 상품이 있을 경우
+			}else { //동일 상품이 있을 경우
+				//재고수를 구하기 위해서 ItemDAO 호출
+				ItemDAO itemDao = ItemDAO.getInstance();
+				ItemVO item = itemDao.getItem(db_cart.getItem_num());
 				
-		//	}
+				//구매수량 합산 (기존 장바구니에 저장된 구매 수량 + 새로 입력한 구매 수량)
+				int order_quantity = db_cart.getOrder_quantity() + cart.getOrder_quantity();
+				if(item.getQuantity() < order_quantity) {
+					//상품 재고 수량보다 장바구니에 담은 구매 수량이 더 많음
+					mapAjax.put("result", "overquantity");
+				}else { //구매 수량 수정 가능
+					cart.setOrder_quantity(order_quantity);
+					//구매 수량 수정
+					dao.updateCartByItem_num(cart);
+					mapAjax.put("result", "success");
+					
+				}
+			}
 		}
 		//JSON 문자열 생성
 		ObjectMapper mapper = new ObjectMapper();

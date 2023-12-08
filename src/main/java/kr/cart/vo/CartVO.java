@@ -12,7 +12,7 @@ public class CartVO {
 	private int mem_num;		//장바구니에 상품을 담은 회원의 회원번호
 	private int sub_total;		//단일 상품의 총 구매 비용
 	
-	private ItemVO itemVO;		//상품관리 VO
+	private ItemVO itemVO;		//상품관리 VO (객체가 많으면 사용하는 경우가 많음)
 
 	public int getCart_num() {
 		return cart_num;
