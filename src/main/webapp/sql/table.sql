@@ -103,6 +103,7 @@ create table zorder(
 	receive_name varchar2(30) not null,
 	receive_post varchar2(5) not null,
 	receive_address1 varchar2(90) not null,
+	receive_address2 varchar2(90) not null,
 	receive_phone varchar2(15) not null,
 	notice varchar2(4000),
 	reg_date date default sysdate not null,

@@ -44,7 +44,7 @@ public class WriteAction implements Action{
 				ItemDAO itemDao = ItemDAO.getInstance();
 				ItemVO item = itemDao.getItem(db_cart.getItem_num());
 				
-				//구매수량 합산 (기존 장바구니에 저장된 구매 수량 + 새로 입력한 구매 수량)
+				//구매수량 합산 (기존 에 저장된 구매 수량 + 새로 입력한 구매 수량)
 				int order_quantity = db_cart.getOrder_quantity() + cart.getOrder_quantity();
 				if(item.getQuantity() < order_quantity) {
 					//상품 재고 수량보다 장바구니에 담은 구매 수량이 더 많음
