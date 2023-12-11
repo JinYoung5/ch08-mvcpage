@@ -10,7 +10,25 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
-
+$(function(){
+	//이벤트 연결
+	$('#order_form').submit(function(){
+		let items = document.querySelectorAll('input[type="text"]');
+		for(let i=0; i<items.length; i++){
+			if(items[i].value.trim()==''){
+				let label = document.querySelector('label[for="'+items[i].id+'"]');
+				alert(label.textContent + ' 항목은 필수 입력');
+				items[i].value = '';
+				items[i].focus();
+				return false;
+			}
+		}//end of for
+		if($('input[type=radio]:checked').length < 1){
+			alert('결제수단을 선택하세요!');
+			return false;
+		}
+	});
+});
 </script>
 </head>
 <body>
@@ -18,48 +36,65 @@
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	<div class="content-main">
 		<h2>상품구매</h2>
-		
-		<form id="register_form" action="registerUser.do" method="post">
+		<table>
+			<tr>
+				<th>상품명</th>
+				<th>수량</th>
+				<th>상품가격</th>
+				<th>합계</th>
+			</tr>
+			<c:forEach var="cart" items="${list}">
+			<tr>
+				<td>
+					<a href="${pageContext.request.contextPath}/item/detail.do?item_num=${cart.item_num}">
+						<img src="${pageContext.request.contextPath}/upload/${cart.itemVO.photo1}" width="80">
+						${cart.itemVO.name}</a>
+				</td>
+				<td class="align-center"><fmt:formatNumber value="${cart.order_quantity}" /></td>
+				<td class="align-center"><fmt:formatNumber value="${cart.itemVO.price}" />원</td>
+				<td class="align-center"><fmt:formatNumber value="${cart.sub_total}" />원</td>
+			</tr>
+			</c:forEach>
+			<tr>
+				<td colspan="3" class="align-right"><b>총 구매금액</b></td>
+				<td class="align-center"><fmt:formatNumber value="${all_total}" />원</td>
+			</tr>
+		</table>
+		<form id="order_form" action="order.do" method="post">
 			<ul>
 				<li>
-					<label for="id">id</label>
-					<input type="text" name="id" id="id" maxlength="12" autocomplete="off" class="input-check">
-					<input type="button" value="ID중복체크" id="id_check">
-					<span id="message_id"></span>
-					<div class="form-notice">*영문 또는 숫자(4자~12자)</div>
-				</li>
-				<li>
-					<label for="name">이름</label>
-					<input type="text" name="name" id="name" maxlength="10" class="input-check">
-				</li>
-				<li>
-					<label for="passwd">비밀번호</label>
-					<input type="password" name="passwd" id="passwd" maxlength="12" class="input-check">
-				</li>
-				<li>
-					<label for="phone">전화번호</label>
-					<input type="text" name="phone" id="phone" maxlength="15" class="input-check">
-				</li>
-				<li>
-					<label for="email">이메일</label>
-					<input type="email" name="email" id="email" maxlength="50" class="input-check">
+					<label for="receive_name">받는 사람</label>
+					<input type="text" name="receive_name" id="receive_name" maxlength="10">
 				</li>
 				<li>
 					<label for="zipcode">우편번호</label>
-					<input type="text" name="zipcode" id="zipcode" maxlength="5" autocomplete="off" class="input-check">
+					<input type="text" name="receive_post" id="zipcode" maxlength="5">
 					<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
 				</li>
 				<li>
 					<label for="address1">주소</label>
-					<input type="text" name="address1" id="address1" maxlength="30" class="input-check">
+					<input type="text" name="receive_address1" id="address1" maxlength="30">
 				</li>
 				<li>
-					<label for="address2">나머지 주소</label>
-					<input type="text" name="address2" id="address2" maxlength="30" class="input-check">
+					<label for="address2">상세주소</label>
+					<input type="text" name="receive_address2" id="address2" maxlength="30">
+				</li>
+				<li>
+					<label for="receive_phone">전화번호</label>
+					<input type="text" name="receive_phone" id="receive_phone" maxlength="15">
+				</li>
+				<li>
+					<label>결제수단</label>
+					<input type="radio" name="payment" id="payment1" value="1">통장입금
+					<input type="radio" name="payment" id="payment2" value="2">카드결제
+				</li>
+				<li>
+					<label for="notice">남기실 말씀</label>
+					<textarea rows="5" cols="30" name="notice" id="notice"></textarea>
 				</li>
 			</ul>
 			<div class="align-center">
-				<input type="submit" value="등록">
+				<input type="submit" value="주문">
 				<input type="button" value="홈으로" onclick="${pageContext.request.contextPath}/main/main.do">
 			</div>
 		</form>

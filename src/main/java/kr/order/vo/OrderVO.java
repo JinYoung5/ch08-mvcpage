@@ -2,7 +2,7 @@ package kr.order.vo;
 
 import java.sql.Date;
 
-public class orderVO {
+public class OrderVO {
 	private int order_num;			//주문번호
 	private String item_name;		//대표 상품명
 	private int order_total;		//총주문 금액
@@ -14,7 +14,7 @@ public class orderVO {
 	private String receive_address2;//배송지 상세주소
 	private String receive_phone;	//배송지 전화번호
 	private String notice;			//남기실 말씀
-	private Date reg_date;			//주문날짜
+	private Date reg_date;			//주문날짜 
 	private Date modify_date;		//주문정보 변경일
 	private int mem_num;			//주문자 회원번호
 	private String id;				//주문자 id (JOIN 해야 가져올 수 있음)
