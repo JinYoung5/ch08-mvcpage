@@ -178,7 +178,7 @@ public class BoardDAO {
 			throw new Exception(e);
 		}finally {
  			DBUtil.executeClose(rs, pstmt, conn);
-            		}
+		}
 		return board;
 	}
 	
