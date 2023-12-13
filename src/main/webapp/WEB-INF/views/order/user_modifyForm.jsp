@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>상품구매상세</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<c:if test="${order.status < 2}">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -23,13 +24,10 @@ $(function(){
 				return false;
 			}
 		}//end of for
-		if($('input[type=radio]:checked').length < 1){
-			alert('결제수단을 선택하세요!');
-			return false;
-		}
 	});
 });
 </script>
+</c:if>
 </head>
 <body>
 <div class="page-main">
@@ -117,8 +115,21 @@ $(function(){
 				</li>
 			</ul>
 			<div class="align-center">
-				<input type="submit" value="주문">
-				<input type="button" value="홈으로" onclick="${pageContext.request.contextPath}/main/main.do">
+				<c:if test="${order.status < 2}">
+				<input type="submit" value="주문 수정">
+				<input type="button" value="주문 취소" id="order_cancel">
+				<script>
+					let order_cancel = document.getElementById('order_cancel');
+					order_cancel.onclick = function(){
+						let choice = confirm('주문을 취소하시겠습니까?');
+						if(choice){
+							location.replace('orderCancel.do?order_num=${order.order_num}');
+						}
+					};
+				</script>
+				</c:if>
+				<input type="button" value="my페이지" onclick="${pageContext.request.contextPath}/member/myPage.do">
+				<input type="button" value="주문목록" onclick="location.href='orderList.do'">
 			</div>
 		</form>
 	</div>

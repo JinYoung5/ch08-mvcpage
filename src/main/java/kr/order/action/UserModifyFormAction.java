@@ -24,6 +24,10 @@ public class UserModifyFormAction implements Action{
 		OrderDAO dao = OrderDAO.getInstance();
 		//주문 정보 호출
 		OrderVO order = dao.getOrder(order_num);
+		if(order.getMem_num() != user_num) {
+			//구매자 회원번호와 로그인한 회원번호가 불일치 할 경우
+			return "/WEB-INF/views/common/notice.jsp";
+		}
 		//주문한 개별 상품 정보 호출
 		List<OrderDetailVO> detailList = dao.getListOrderDetail(order_num);
 		

@@ -6,6 +6,28 @@
 <meta charset="UTF-8">
 <title>게시판 글쓰기</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<script type="text/javascript">
+window.onload=function(){
+	let myForm = document.getElementById('write_form');
+	//이벤트 연결
+	myForm.onsubmit=function(){
+		let title = document.getElementById('title');
+		if(title.value.trim()==''){
+			alert('제목을 입력하세요');
+			title.value = '';
+			title.focus();
+			return false;
+		}
+		let content = document.getElementById('content');
+		if(content.value.trim()==''){
+			alert('내용을 입력하세요');
+			content.value = '';
+			content.focus();
+			return false;
+		}
+	};
+};
+</script>
 </head>
 <body>
 <div class="page-main">
