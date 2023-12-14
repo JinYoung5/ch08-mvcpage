@@ -166,7 +166,7 @@ $(function(){
 				<c:forEach var="order" items="${orderList}">
 				<li>
 					<div>
-						<a href="${pageContext.request.contextPath}/order/orderModifyForm.do?order_num=${order.order_num}">
+						<a href="${pageContext.request.contextPath}/order/orderDetail.do?order_num=${order.order_num}">
 							${order.order_num} ${order.item_name} (${order.reg_date})
 							<c:if test="${order.status == 1}">배송대기</c:if>
 							<c:if test="${order.status == 2}">배송준비중</c:if>

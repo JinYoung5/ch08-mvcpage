@@ -300,71 +300,79 @@ public class OrderDAO {
 		
 		return order;
 	}
-	//관리자/사용자 - 주문수정
+	//관리자/사용자 - 배송지정보 수정
 	public void updateOrder(OrderVO order)throws Exception{
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		PreparedStatement pstmt2 = null;
 		String sql = null;
-		String sub_sql = "";
-		int cnt = 0;
 		
 		try {
 			//커넥션풀로부터 커넥션을 할당
 			conn = DBUtil.getConnection();
-			//오토커밋 해제
-			conn.setAutoCommit(false);
-			
-			OrderVO db_order = getOrder(order.getOrder_num());
-			/*
-			 * 배송상태를 변경할 때 배송대기일 때만 주문정보를 변경할 수 있도록 처리
-			 * 배송준비중, 배송중, 배송완료로 변경한 후 다시 배송대기로 변경한 후 다시 배송대기로 변경하면
-			 * 수정 폼에 주문정보가 없어서 오류가 나는 현상이 발생하기 때문에
-			 * DB에 저장된 내용을 확인해서 배송대기 중일 때만 주문정보 변경이 가능하도록 처리
-			 */
-			if(order.getStatus() == 1 && db_order.getStatus() == 1) {
-				sub_sql += "receive_name=?,receive_post=?,receive_address1=?,receive_address2=?,receive_phone=?,notice=?,";
-			}
+
 			//SQL문 작성
-			sql = "UPDATE zorder SET status=?," + sub_sql + "modify_date=SYSDATE WHERE order_num=?";
+			sql = "UPDATE zorder SET receive_name=?,receive_post=?,receive_address1=?,receive_address2=?,receive_phone=?,notice=?,modify_date=SYSDATE WHERE order_num=?";
 			//PreparedStatement 객체 생성
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(++cnt, order.getStatus());
-			if(order.getStatus() == 1 && db_order.getStatus() == 1) {
-				pstmt.setString(++cnt, order.getReceive_name());
-				pstmt.setString(++cnt, order.getReceive_post());
-				pstmt.setString(++cnt, order.getReceive_address1());
-				pstmt.setString(++cnt, order.getReceive_address2());
-				pstmt.setString(++cnt, order.getReceive_phone());
-				pstmt.setString(++cnt, order.getNotice());
-			}
-			pstmt.setInt(++cnt, order.getOrder_num());
+			pstmt.setString(1, order.getReceive_name());
+			pstmt.setString(2, order.getReceive_post());
+			pstmt.setString(3, order.getReceive_address1());
+			pstmt.setString(4, order.getReceive_address2());
+			pstmt.setString(5, order.getReceive_phone());
+			pstmt.setString(6, order.getNotice());
+			pstmt.setInt(7, order.getOrder_num());
 			//SQL문 실행
 			pstmt.executeUpdate();
 			
-			//주문 취소일 경우만 상품 개수 조정
-			if(order.getStatus() == 5) {
-				//주문번호에 해당하는 상품 정보 구하기
-				List<OrderDetailVO> detailList = getListOrderDetail(order.getOrder_num());
-				sql = "UPDATE zitem SET quantity=quantity+? WHERE item_num=?";
-				pstmt2 = conn.prepareStatement(sql);
-				for(int i=0; i<detailList.size(); i++) {
-					OrderDetailVO detail = detailList.get(i);
-					pstmt2.setInt(1, detail.getOrder_quantity());
-					pstmt2.setInt(2, detail.getItem_num());
-					pstmt2.addBatch();
-					
-					if(i%1000==0) {
-						pstmt2.executeBatch();
-					}
-				}//end of for
-				pstmt2.executeBatch();
-			}//end of if
+		}catch(Exception e) {
+			throw new Exception(e);
+		}finally {
+			DBUtil.executeClose(null, pstmt, conn);
+		}
+	}
+	//사용자 - 주문취소
+	public void updateOrderCancel(int order_num)throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		String sql = null;
+		
+		try {
+			//커넥션풀로부터 커넥션 할당
+			conn = DBUtil.getConnection();
+			//오토커밋 해제
+			conn.setAutoCommit(false);
+			//SQL문 작성
+			sql = "UPDATE zorder set status=5,modify_date=SYSDATE WHERE order_num=?";
+			//PreparedStatement 객체 생성
+			pstmt = conn.prepareStatement(sql);
+			//?에 데이터 바인딩
+			pstmt.setInt(1, order_num);
+			//SQL문 실행
+			pstmt.executeUpdate();
 			
-			//모든 SQL문이 정상적으로 처리
+			//주문번호에 해당하는 상품정보 구하기
+			List<OrderDetailVO> detailList = getListOrderDetail(order_num);
+			//주문 취소로 주문 상품의 재고수 환원
+			sql = "UPDATE zitem SET quantity=quantity+? WHERE item_num=?";
+			//PreparedStatement 객체 생성
+			pstmt2 = conn.prepareStatement(sql);
+			for(int i=0; i<detailList.size();i++) {
+				OrderDetailVO detail = detailList.get(i);
+				pstmt2.setInt(1, detail.getOrder_quantity());
+				pstmt2.setInt(2, detail.getOrder_num());
+				pstmt2.addBatch();
+				
+				if(i%1000 == 0) {
+					pstmt2.executeBatch();
+				}
+			}//end of for
+			pstmt2.executeBatch();
+			
+			//모든 SQL문이 정상적으로 실행
 			conn.commit();
 		}catch(Exception e) {
-			//하나라도 오류가 발생하면
+			//하나라도 오류가 있으면
 			conn.rollback();
 			throw new Exception(e);
 		}finally {
@@ -372,5 +380,4 @@ public class OrderDAO {
 			DBUtil.executeClose(null, pstmt, conn);
 		}
 	}
-	//사용자 - 주문취소
 }

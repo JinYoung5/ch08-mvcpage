@@ -1,14 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>상품구매상세</title>
+<title>배송지정보 수정</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-<c:if test="${order.status < 2}">
+<c:if test="${order.status == 1}">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 $(function(){
@@ -33,33 +32,17 @@ $(function(){
 <div class="page-main">
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	<div class="content-main">
-		<h2>상품구매 내역</h2>
-		<table>
-			<tr>
-				<th>상품명</th>
-				<th>수량</th>
-				<th>상품가격</th>
-				<th>합계</th>
-			</tr>
-			<c:forEach var="detail" items="${detailList}">
-			<tr>
-				<td>${detail.item_name}</td>
-				<td class="align-center"><fmt:formatNumber value="${detail.order_quantity}" /></td>
-				<td class="align-center"><fmt:formatNumber value="${detail.item_price}" />원</td>
-				<td class="align-center"><fmt:formatNumber value="${detail.item_total}" />원</td>
-			</tr>
-			</c:forEach>
-			<tr>
-				<td colspan="3" class="align-right"><b>총 구매금액</b></td>
-				<td class="align-center"><fmt:formatNumber value="${order.order_total}" />원</td>
-			</tr>
-		</table>
+		<h2>배송지정보 수정</h2>
+		<c:if test="${order.status != 1}">
+		<div class="result-display">
+			배송대기일 떄만 배송지정보를 수정할 수 있습니다.
+		</div>
+		</c:if>
+		<c:if test="${order.status == 1}">
 		<form id="order_modify" action="orderModify.do" method="post">
 			<input type="hidden" name="order_num" value="${order.order_num}">
-			<input type="hidden" name="status" value="${order.status}">
 			<ul>
 				<%-- status:1 배송대기 --%>
-				<c:if test="${order.status < 2}">
 				<li>
 					<label for="receive_name">받는 사람</label>
 					<input type="text" name="receive_name" id="receive_name" value="${order.receive_name}" maxlength="10">
@@ -85,53 +68,14 @@ $(function(){
 					<label for="notice">남기실 말씀</label>
 					<textarea rows="5" cols="30" name="notice" id="notice">${order.notice}</textarea>
 				</li>
-				</c:if>
-				<c:if test="${order.status >= 2}">
-				<li>
-					<label>받는 사람</label>
-					${order.receive_name}
-				</li>
-				<li>
-					<label>우편번호</label>
-					${order.receive_post}
-				</li>
-				<li>
-					<label>주소</label>
-					${order.receive_address1} ${order.receive_address2}
-				</li>
-				<li>
-					<label>전화번호</label>
-					${order.receive_phone}
-				</li>
-				<li>
-					<label>남기실 말씀</label>
-					${order.notice}
-				</li>
-				</c:if>
-				<li>
-					<label>결제 수단</label>
-					<c:if test="${order.payment == 1}">통장입금</c:if>
-					<c:if test="${order.payment == 2}">카드결제</c:if>
-				</li>
 			</ul>
 			<div class="align-center">
-				<c:if test="${order.status < 2}">
 				<input type="submit" value="주문 수정">
-				<input type="button" value="주문 취소" id="order_cancel">
-				<script>
-					let order_cancel = document.getElementById('order_cancel');
-					order_cancel.onclick = function(){
-						let choice = confirm('주문을 취소하시겠습니까?');
-						if(choice){
-							location.replace('orderCancel.do?order_num=${order.order_num}');
-						}
-					};
-				</script>
-				</c:if>
-				<input type="button" value="my페이지" onclick="${pageContext.request.contextPath}/member/myPage.do">
+				<input type="button" value="my페이지" onclick="location.href='${pageContext.request.contextPath}/member/myPage.do'">
 				<input type="button" value="주문목록" onclick="location.href='orderList.do'">
 			</div>
 		</form>
+		</c:if>
 	</div>
 </div>
 <!-- 우편번호 검색 시작 -->
