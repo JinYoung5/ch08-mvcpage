@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>배송지정보 수정</title>
+<title>[관리자]배송지정보 수정</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <c:if test="${order.status == 1}">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
@@ -32,14 +32,14 @@ $(function(){
 <div class="page-main">
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	<div class="content-main">
-		<h2>배송지정보 수정</h2>
+		<h2>[관리자]배송지정보 수정</h2>
 		<c:if test="${order.status != 1}">
 		<div class="result-display">
 			배송대기일 떄만 배송지정보를 수정할 수 있습니다.
 		</div>
 		</c:if>
 		<c:if test="${order.status == 1}">
-		<form id="order_modify" action="orderModify.do" method="post">
+		<form id="order_modify" action="modify.do" method="post">
 			<input type="hidden" name="order_num" value="${order.order_num}">
 			<ul>
 				<%-- status:1 배송대기 --%>
@@ -71,8 +71,7 @@ $(function(){
 			</ul>
 			<div class="align-center">
 				<input type="submit" value="배송지 수정">
-				<input type="button" value="my페이지" onclick="location.href='${pageContext.request.contextPath}/member/myPage.do'">
-				<input type="button" value="주문목록" onclick="location.href='orderList.do'">
+				<input type="button" value="주문목록" onclick="location.href='adminList.do'">
 			</div>
 		</form>
 		</c:if>

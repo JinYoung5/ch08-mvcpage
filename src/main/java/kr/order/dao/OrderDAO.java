@@ -118,7 +118,88 @@ public class OrderDAO {
 		}
 	}
 	//관리자 - 전체 주문 개수/검색 주문 개수
+	public int getOrderCount(String keyfield,String keyword)throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String sub_sql = "";
+		int count = 0;
+	try {
+		conn = DBUtil.getConnection();
+		if(keyword != null && !"".equals(keyword)) {
+			if(keyfield.equals("1")) sub_sql += "WHERE order_num = ?";
+			else if(keyfield.equals("2")) sub_sql += "WHERE id LIKE '%' || ? || '%' ";
+			else if(keyfield.equals("3")) sub_sql += "WHERE item_name LIKE '%' || ? || '%' ";
+		}
+		sql = "SELECT COUNT(*) FROM zorder JOIN zmember USING(mem_num)" + sub_sql;
+		pstmt = conn.prepareStatement(sql);
+		if(keyword != null && !"".equals(keyword)) {			
+			pstmt.setString(1,keyword);
+		}
+		rs = pstmt.executeQuery();
+		if(rs.next()) {
+			count = rs.getInt(1);
+		}
+	}catch(Exception e) {
+		throw new Exception(e);
+	}finally {
+		DBUtil.executeClose(rs, pstmt, conn);
+	}
+	return count;
+}
 	//관리자 - 전체 주문 목록/검색 주문 목록
+	public List<OrderVO> getListOrder(int start, int end, String keyfield, String keyword)throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<OrderVO> list = null;
+		String sql = null;
+		String sub_sql = "";
+		int cnt = 0;
+		
+		try {
+			//커넥션 풀로부터 커넥션 할당
+			conn = DBUtil.getConnection();
+			
+			if(keyword != null && !"".equals(keyword)) {
+				if(keyfield.equals("1")) sub_sql += "WHERE order_num = ?";
+				else if(keyfield.equals("2")) sub_sql += "WHERE id LIKE '%' || ? || '%' ";
+				else if(keyfield.equals("3")) sub_sql += "WHERE item_name LIKE '%' || ? || '%' ";
+			}
+			//SQL문 작성
+			sql = "SELECT * FROM (SELECT a.*, rownum rnum FROM (SELECT * FROM zorder JOIN zmember USING(mem_num)" + sub_sql + " ORDER BY order_num DESC)a) WHERE rnum >= ? AND rnum <= ?";
+			//PreparedStatement 객체 생성
+			pstmt = conn.prepareStatement(sql);
+			//?에 데이터 바인딩
+			if(keyword != null && !"".equals(keyword)) {
+				pstmt.setString(++cnt, keyword);
+			}
+			pstmt.setInt(++cnt, start);
+			pstmt.setInt(++cnt, end);
+			//SQL문 실행
+			rs = pstmt.executeQuery();
+			
+			list = new ArrayList<OrderVO>();
+			while(rs.next()) {
+				OrderVO order = new OrderVO();
+				order.setOrder_num(rs.getInt("order_num"));
+				order.setItem_name(rs.getString("item_name"));
+				order.setOrder_total(rs.getInt("order_total"));
+				order.setStatus(rs.getInt("status"));
+				order.setReg_date(rs.getDate("reg_date"));
+				order.setId(rs.getString("id"));
+				
+				list.add(order);
+			}
+		}catch(Exception e) {
+			throw new Exception(e);
+		}finally {
+			DBUtil.executeClose(rs, pstmt, conn);
+		}
+		
+		return list;
+	}
 	//사용자 - 전체 주문 개수/검색 주문 개수
 	public int getOrderCountByMem_num(String keyfield,String keyword,int mem_num)throws Exception{
 		Connection conn = null;

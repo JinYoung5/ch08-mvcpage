@@ -20,6 +20,9 @@
 		<li>
 			<a href="${pageContext.request.contextPath}/item/adminList.do">상품관리</a>
 		</li>
+		<li>
+			<a href="${pageContext.request.contextPath}/order/adminList.do">주문관리</a>
+		</li>
 		</c:if>
 		<c:if test="${!empty user_num}">
 		<li><a href="${pageContext.request.contextPath}/cart/list.do">장바구니</a></li>
