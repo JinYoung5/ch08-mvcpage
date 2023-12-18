@@ -20,6 +20,13 @@ window.onload = function() {
 			keyword.focus();
 			return false;
 		}
+		let keyfield = document.getElementById('keyfield');
+        if(keyfield.value==1 && isNaN(keyword.value)){
+           alert('숫자만 입력하세요');
+           keyword.value='';
+           keyword.focus();
+           return false;
+        }
 	};
 };
 </script>
