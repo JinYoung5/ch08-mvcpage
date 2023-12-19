@@ -34,7 +34,7 @@ public class UserModifyAction implements Action{
 		if(db_order.getStatus()>1) {
 			//배송준비중 이상으로 관리자가 변경한 상품을 주문자가 변경할 수 없음
 			request.setAttribute("notice_msg", "배송상태가 변경되어 주문자가 주문정보 변경 불가");
-			request.setAttribute("notice_url", request.getContextPath()+"/order/orderList.do");
+			request.setAttribute("notice_url", request.getContextPath()+"/order/order.do");
 			return "/WEB-INF/views/common/alert_singleView.jsp";
 		}
 		
@@ -50,7 +50,7 @@ public class UserModifyAction implements Action{
 		dao.updateOrder(order);
 		
 		request.setAttribute("notice_msg", "정상적으로 수정되었습니다.");
-		request.setAttribute("notice_url", request.getContextPath()+"/order/orderModifyForm.do?order_num="+order_num);
+		request.setAttribute("notice_url", request.getContextPath()+"/order/orderDetail.do?order_num="+order_num);
 		
 		return "/WEB-INF/views/common/alert_singleView.jsp";
 	}
