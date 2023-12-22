@@ -66,8 +66,8 @@
          		</a>
          	</div>
          	</c:forEach>
+         	<div class="float-clear align-center">${page}</div>
          </div>
-            <div class="align-center">${page}</div>
          </c:if>
       </div>
    </div>
